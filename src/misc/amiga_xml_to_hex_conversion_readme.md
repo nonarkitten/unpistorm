@@ -4,5 +4,5 @@ it can be used to build a core.
 This can be done in **Linux** or **WSL** (Windows Subsystem for Linux),
 with the following simple steps:
 
-1.) gzip -n amiga.xml  
-2.) xxd -c1 -p amiga.xml.gz > amiga_xml.hex
+gzip -n amiga.xml  
+xxd -c1 -p amiga.xml.gz > amiga_xml.hex
