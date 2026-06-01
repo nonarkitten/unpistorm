@@ -658,11 +658,11 @@ always @(posedge clk_sys) begin
 	      // advance to next sector
 	      // ide_sector goes from 1 to sectors,
 	      // ide_head goes from 0 to heads-1
-	      if ( ide_sector < sectors[0] )
+		   if ( ide_sector < sectors[ide_drv] )
 		ide_sector <= ide_sector + 8'd1;
 	      else begin
 		 ide_sector <= 8'd1;
-		 if( ide_head < heads[0]-1 )
+			  if( ide_head < heads[ide_drv]-1 )
 		   ide_head <= ide_head + 8'd1;
 		 else begin
 		    ide_head <= 8'd0;
