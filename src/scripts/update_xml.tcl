@@ -7,6 +7,10 @@
 package require zlib
 puts "MiSTle XML Tool, board = $board, config = $config"
 
+# it would be nice if we could access the project options from
+# here as e.g. OUTPUT_BASE_NAME would nice to distinguish which
+# board we are building for
+
 # Function to read the entire file content
 proc readFile {filename} {
     # Check if file exists and is readable
@@ -65,10 +69,21 @@ set hex_ext "_xml.hex"
 
 # step 1: create platform independent xml file name
 set filename_xml [ file join misc $config$xml_ext ]
-puts "Reading file $filename_xml"
 
 # step 2: read file into memory
 set data_xml [ readFile $filename_xml ]
+puts [ format "Read %d bytes from $filename_xml" [ string length $data_xml ] ]
+
+# the data loaded into memory can now be processed
+
+# remove all <!-- --> style comments
+regsub -all {<!--.*?-->} $data_xml "" data_xml
+# remove all blank lines
+regsub -all -line {^\s*$\n?} $data_xml "" data_xml
+# remove all leading and trailing white spaces from each line
+regsub -all -line {^[ \t]+|[ \t]+$} $data_xml "" data_xml
+
+puts [ format "Cleaned up to %d bytes" [ string length $data_xml ] ]
 
 # step 3: gzip compress
 set data_gzip [zlib gzip $data_xml]
@@ -80,7 +95,7 @@ set data_hex [ string2hex $data_gzip ]
 
 # step 5: writing out hex
 set filename_hex [ file join misc $config$hex_ext ]
-puts "Writing file $filename_hex"
+puts [ format "Writing %d compressed bytes to $filename_hex" [ string length $data_gzip ] ]
 set outfile [open $filename_hex w]
 puts -nonewline $outfile $data_hex
 close $outfile
