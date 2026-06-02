@@ -52,13 +52,15 @@ PY
 
 echo "version string added to amiga_work.xml"
 
-gzip -c -n -f $WORK_XML > $WORK_GZ
-xxd -c1 -p $WORK_GZ > $DEST_HEX
+# The following is not needed since the conmversion is now done
+# automatically during synthesis
+# gzip -c -n -f $WORK_XML > $WORK_GZ
+# xxd -c1 -p $WORK_GZ > $DEST_HEX
 
 # comment line below for debugging file generation
-rm $WORK_XML $WORK_GZ
+# rm $WORK_XML $WORK_GZ
 
-echo "amiga_work.xml compressed and converted to amiga_xml.hex"
+# echo "amiga_work.xml compressed and converted to amiga_xml.hex"
 
 read -n 1 -s -r -p "Press any key to continue..."
 echo
