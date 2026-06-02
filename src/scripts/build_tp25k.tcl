@@ -1,4 +1,8 @@
-set_device GW5A-LV25LQ144C1/I0 -name GW5A-25A
+set board "tang_primer25k"
+set config "amiga"
+source scripts/update_xml.tcl
+
+set_device GW5A-LV25MG121NC1/I0 -name GW5A-25A
 
 add_file nanomig.v
 add_file minimig-aga/amiga_clk.v
@@ -81,11 +85,10 @@ add_file tang/primer25k/gowin_pll/pll_142m_mod.v
 add_file tang/primer25k/gowin_pll/pll_init.v
 add_file tang/primer25k/gowin_dpb/sector_dpram.v
 add_file tang/primer25k/gowin_dpb/ide_dpram.v
-add_file misc/ws2812.v
-add_file mistle/gw5a_25/top.sv
+add_file tang/primer25k/top.sv
 add_file misc/sdram.sv
-add_file mistle/gw3a_20/nanomig.cst
-add_file mistle/gw3a_20/nanomig.sdc
+add_file tang/primer25k/nanomig.cst
+add_file tang/primer25k/nanomig.sdc
 add_file fx68k/microrom.mem
 add_file fx68k/nanorom.mem
 add_file tg68k/TG68K_Pack.vhd
@@ -95,7 +98,7 @@ add_file tg68k/TG68KdotC_Kernel.vhd
 add_file misc/amiga_xml.hex
 
 set_option -synthesis_tool gowinsynthesis
-set_option -output_base_name nanomig_mistle_gw5a_25
+set_option -output_base_name nanomig_tp25k
 set_option -verilog_std sysv2017
 set_option -top_module top
 set_option -use_mspi_as_gpio 1

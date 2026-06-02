@@ -1,3 +1,7 @@
+set board "mistle_gw3a_20"
+set config "amiga"
+source scripts/update_xml.tcl
+
 set_device GW3A-LV20LQ144C1/I0 -name GW3A-20A
 
 add_file mistle/gw3a_20/top.sv

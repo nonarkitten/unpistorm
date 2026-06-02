@@ -1,4 +1,8 @@
-set_device GW5AST-LV138PG484AC1/I0 -device_version C
+set board "mistle_gw5a_25"
+set config "amiga"
+source scripts/update_xml.tcl
+
+set_device GW5A-LV25LQ144C1/I0 -name GW5A-25A
 
 add_file nanomig.v
 add_file minimig-aga/amiga_clk.v
@@ -75,16 +79,17 @@ add_file misc/sd_rw.v
 add_file misc/sdcmd_ctrl.v
 add_file misc/amiga_keymap.v
 add_file misc/flash_dspi.v
-add_file tang/mega138kpro/gowin_clkdiv/gowin_clkdiv.v
-add_file tang/console138k/gowin_pll/pll_142m.v
-add_file tang/console138k/gowin_pll/pll_142m_mod.v
-add_file tang/console138k/pll_init.v
-add_file tang/mega138kpro/gowin_dpb/sector_dpram.v
-add_file tang/mega138kpro/gowin_dpb/ide_dpram.v
-add_file tang/console138k/top.sv
+add_file tang/primer25k/gowin_clkdiv/gowin_clkdiv.v
+add_file tang/primer25k/gowin_pll/pll_142m.v
+add_file tang/primer25k/gowin_pll/pll_142m_mod.v
+add_file tang/primer25k/gowin_pll/pll_init.v
+add_file tang/primer25k/gowin_dpb/sector_dpram.v
+add_file tang/primer25k/gowin_dpb/ide_dpram.v
+add_file misc/ws2812.v
+add_file mistle/gw5a_25/top.sv
 add_file misc/sdram.sv
-add_file tang/console138k/nanomig.cst
-add_file tang/console138k/nanomig.sdc
+add_file mistle/gw3a_20/nanomig.cst
+add_file mistle/gw3a_20/nanomig.sdc
 add_file fx68k/microrom.mem
 add_file fx68k/nanorom.mem
 add_file tg68k/TG68K_Pack.vhd
@@ -94,50 +99,20 @@ add_file tg68k/TG68KdotC_Kernel.vhd
 add_file misc/amiga_xml.hex
 
 set_option -synthesis_tool gowinsynthesis
-set_option -output_base_name nanomig_tc138k
+set_option -output_base_name nanomig_mistle_gw5a_25
 set_option -verilog_std sysv2017
 set_option -top_module top
-
 set_option -use_mspi_as_gpio 1
 set_option -use_sspi_as_gpio 1
 set_option -use_done_as_gpio 1
 set_option -use_cpu_as_gpio 1
+set_option -use_i2c_as_gpio 1
 set_option -use_ready_as_gpio 1
 set_option -use_jtag_as_gpio 1
-set_option -use_mode_as_gpio 0
-set_option -use_i2c_as_gpio 0
-set_option -print_all_synthesis_warning 0
-set_option -show_all_warn 1
-set_option -rw_check_on_ram 0
-set_option -user_code 00000002
-set_option -bit_compress 1
+set_option -cst_warn_to_error 1
 set_option -multi_boot 0
 set_option -mspi_jump 0
-set_option -turn_off_bg 0
-set_option -vccx 1.8
-set_option -vcc 0.9
-set_option -power_on_reset_monitor 1
-set_option -timing_driven 1
-set_option -cst_warn_to_error 1
-set_option -rpt_auto_place_io_info 1
-set_option -convert_sdp32_36_to_sdp16_18 1
-set_option -correct_hold_violation 1
+set_option -bit_compress 1
 set_option -loading_rate 70.000
-set_option -place_option 2
-set_option -route_option 1
-set_option -ireg_in_iob 1
-set_option -oreg_in_iob 1
-set_option -ioreg_in_iob 1
-set_option -bit_crc_check 1
-set_option -bit_security 1
-set_option -bit_incl_bsram_init 1
-set_option -bg_programming off
-set_option -hotboot 0
-set_option -program_done_bypass 0
-set_option -wakeup_mode 0
-set_option -serdesRetiming 0
-set_option -enable_dsrm 0
-set_option -disable_io_insertion 0
-set_option -looplimit 2000
 
 run all

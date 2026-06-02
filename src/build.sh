@@ -5,4 +5,4 @@ if [ "$#" -eq 1 ]; then
 fi
 
 # run through grc to highlight NOTEs, WARNings and ERRORs
-grc --config=gw_sh.grc gw_sh ./build${EXT}.tcl
+grc --config=gw_sh.grc gw_sh scripts/build${EXT}.tcl

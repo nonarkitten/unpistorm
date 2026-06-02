@@ -1,4 +1,8 @@
-set_device GW5A-LV25MG121NC1/I0 -name GW5A-25A
+set board "tang_console60k"
+set config "amiga"
+source scripts/update_xml.tcl
+
+set_device GW5AT-LV60PG484AC1/I0 -name GW5AT-60B
 
 add_file nanomig.v
 add_file minimig-aga/amiga_clk.v
@@ -75,16 +79,16 @@ add_file misc/sd_rw.v
 add_file misc/sdcmd_ctrl.v
 add_file misc/amiga_keymap.v
 add_file misc/flash_dspi.v
-add_file tang/primer25k/gowin_clkdiv/gowin_clkdiv.v
+add_file misc/sdram.sv
+add_file tang/console60k/gowin_clkdiv/gowin_clkdiv.v
 add_file tang/primer25k/gowin_pll/pll_142m.v
 add_file tang/primer25k/gowin_pll/pll_142m_mod.v
 add_file tang/primer25k/gowin_pll/pll_init.v
-add_file tang/primer25k/gowin_dpb/sector_dpram.v
-add_file tang/primer25k/gowin_dpb/ide_dpram.v
-add_file tang/primer25k/top.sv
-add_file misc/sdram.sv
-add_file tang/primer25k/nanomig.cst
-add_file tang/primer25k/nanomig.sdc
+add_file tang/console60k/gowin_dpb/sector_dpram.v
+add_file tang/console60k/gowin_dpb/ide_dpram.v
+add_file tang/console60k/top.sv
+add_file tang/console60k/nanomig.cst
+add_file tang/console60k/nanomig.sdc
 add_file fx68k/microrom.mem
 add_file fx68k/nanorom.mem
 add_file tg68k/TG68K_Pack.vhd
@@ -94,14 +98,14 @@ add_file tg68k/TG68KdotC_Kernel.vhd
 add_file misc/amiga_xml.hex
 
 set_option -synthesis_tool gowinsynthesis
-set_option -output_base_name nanomig_tp25k
+set_option -output_base_name nanomig_tc60k
 set_option -verilog_std sysv2017
 set_option -top_module top
 set_option -use_mspi_as_gpio 1
 set_option -use_sspi_as_gpio 1
 set_option -use_done_as_gpio 1
-set_option -use_cpu_as_gpio 1
 set_option -use_i2c_as_gpio 1
+set_option -use_cpu_as_gpio 1
 set_option -use_ready_as_gpio 1
 set_option -use_jtag_as_gpio 1
 set_option -cst_warn_to_error 1
@@ -109,5 +113,6 @@ set_option -multi_boot 0
 set_option -mspi_jump 0
 set_option -bit_compress 1
 set_option -loading_rate 70.000
+set_option -user_code 00000002
 
 run all

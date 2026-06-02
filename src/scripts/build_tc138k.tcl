@@ -1,5 +1,8 @@
-# last sucessful build Gowin 1.9.10.03
-set_device GW5AST-LV138FPG676AES -name GW5AST-138B
+set board "tang_console138k"
+set config "amiga"
+source scripts/update_xml.tcl
+
+set_device GW5AST-LV138PG484AC1/I0 -device_version C
 
 add_file nanomig.v
 add_file minimig-aga/amiga_clk.v
@@ -70,7 +73,6 @@ add_file misc/mcu_spi.v
 add_file misc/sysctrl.v
 add_file misc/hid.v
 add_file misc/osd_u8g2.v
-add_file misc/ws2812.v
 add_file misc/video_analyzer.v
 add_file misc/sd_card.v
 add_file misc/sd_rw.v
@@ -78,15 +80,15 @@ add_file misc/sdcmd_ctrl.v
 add_file misc/amiga_keymap.v
 add_file misc/flash_dspi.v
 add_file tang/mega138kpro/gowin_clkdiv/gowin_clkdiv.v
-add_file tang/mega138kpro/gowin_pll/pll_142m.v
-add_file tang/mega138kpro/gowin_pll/pll_142m_mod.v
-add_file tang/mega138kpro/gowin_pll/pll_init.v
+add_file tang/console138k/gowin_pll/pll_142m.v
+add_file tang/console138k/gowin_pll/pll_142m_mod.v
+add_file tang/console138k/pll_init.v
 add_file tang/mega138kpro/gowin_dpb/sector_dpram.v
 add_file tang/mega138kpro/gowin_dpb/ide_dpram.v
-add_file tang/mega138kpro/top.sv
+add_file tang/console138k/top.sv
 add_file misc/sdram.sv
-add_file tang/mega138kpro/nanomig.cst
-add_file tang/mega138kpro/nanomig.sdc
+add_file tang/console138k/nanomig.cst
+add_file tang/console138k/nanomig.sdc
 add_file fx68k/microrom.mem
 add_file fx68k/nanorom.mem
 add_file tg68k/TG68K_Pack.vhd
@@ -96,7 +98,7 @@ add_file tg68k/TG68KdotC_Kernel.vhd
 add_file misc/amiga_xml.hex
 
 set_option -synthesis_tool gowinsynthesis
-set_option -output_base_name nanomig_tm138kpro
+set_option -output_base_name nanomig_tc138k
 set_option -verilog_std sysv2017
 set_option -top_module top
 
@@ -111,7 +113,7 @@ set_option -use_i2c_as_gpio 0
 set_option -print_all_synthesis_warning 0
 set_option -show_all_warn 1
 set_option -rw_check_on_ram 0
-set_option -user_code 00000001
+set_option -user_code 00000002
 set_option -bit_compress 1
 set_option -multi_boot 0
 set_option -mspi_jump 0
