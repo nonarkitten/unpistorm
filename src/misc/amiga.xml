@@ -59,6 +59,10 @@
 	<listentry label="None" value="0"/>
 	<listentry label="2MB" value="1"/>
 	<listentry label="4MB" value="2"/>
+	<!-- the gw3a_20 and gw5a_25 boards have 32 MB SDRAM and support 8MB -->
+	<!--IS mistle_gw3a_20 mistle_gw5a_25 -->
+	<listentry label="8MB" value="3"/>
+	<!--END-->
       </list>	
       <list label="Video:" id="V" default="0">
 	<listentry label="PAL" value="0"/>
@@ -119,11 +123,14 @@
 		<listentry label="Vertical" value="2"/>
 		<listentry label="Hor+Ver" value="3"/>
       </list>
+      <!-- the lcd variants have no HDMI and thus no use for overscan control -->
+      <!--NOT tang_nano20k_lcd -->
       <list label="Screen:" id="W" default="0">
 	<listentry label="Standard" value="0"/>
 	<listentry label="Overscan" value="1"/>
 	<listentry label="Wide" value="2"/>
       </list>
+      <!--END-->
       <button label="Save settings" action="save"/>
     </menu>
     <button label="Reset" action="reset_hide"/>

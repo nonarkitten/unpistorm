@@ -1,3 +1,7 @@
+set board "tang_nano20k_lcd"
+set config "amiga"
+source scripts/update_xml.tcl
+
 set_device GW2AR-LV18QN88C8/I7 -name GW2AR-18C
 
 add_file nanomig.v

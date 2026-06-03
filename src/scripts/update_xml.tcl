@@ -74,9 +74,21 @@ set filename_xml [ file join misc $config$xml_ext ]
 set data_xml [ readFile $filename_xml ]
 puts [ format "Read %d bytes from $filename_xml" [ string length $data_xml ] ]
 
-# the data loaded into memory can now be processed
+# ===== the data loaded into memory can now be processed =====
 
-# remove all <!-- --> style comments
+# mark parts to be kept or removed based in the board name ...
+regsub -all -line "<!--IS.*? $board .*?-->" $data_xml "<!--KEEP-->" data_xml
+regsub -all -line "<!--IS.*? $board-->" $data_xml "<!--KEEP-->" data_xml
+regsub -all -line {<!--IS.*?-->} $data_xml "<!--REMOVE-->" data_xml
+regsub -all -line "<!--NOT.*? $board .*?-->" $data_xml "<!--REMOVE-->" data_xml
+regsub -all -line "<!--NOT.*? $board-->" $data_xml "<!--REMOVE-->" data_xml
+regsub -all -line "<!--NOT.*?-->" $data_xml "<!--KEEP-->" data_xml
+
+# ... and actually remove or keep those parts
+regsub -all {<!--REMOVE-->.*?<!--END-->} $data_xml "" data_xml
+regsub -all {<!--KEEP-->(.*?)<!--END-->} $data_xml {\1} data_xml
+
+# remove all <!-- --> style xml comments
 regsub -all {<!--.*?-->} $data_xml "" data_xml
 # remove all blank lines
 regsub -all -line {^\s*$\n?} $data_xml "" data_xml
@@ -84,6 +96,9 @@ regsub -all -line {^\s*$\n?} $data_xml "" data_xml
 regsub -all -line {^[ \t]+|[ \t]+$} $data_xml "" data_xml
 
 puts [ format "Cleaned up to %d bytes" [ string length $data_xml ] ]
+
+# dump filtered xml for debugging
+# puts $data_xml
 
 # step 3: gzip compress
 set data_gzip [zlib gzip $data_xml]

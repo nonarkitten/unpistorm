@@ -40,9 +40,8 @@ module top(
   output		pmod_companion_intn,
   input			pmod_companion_spare,
 
-  // debug monitoring
-  output		mon_tx,
-  input			mon_rx,
+  // extension connector
+  input [5:0]	ext,
 		   
   // MIDI/UART
   input			midi_in,
@@ -64,10 +63,6 @@ module top(
   output [2:0]	tmds_d_p
 );
 
-// the monitoring UART is currently unused, so just wire
-// them together
-assign mon_tx = mon_rx;
-     
 // physcial dsub9 joystick & mouse port 1 is unused
 wire [5:0]	db9_joy = joya;
    

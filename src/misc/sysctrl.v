@@ -77,9 +77,6 @@ reg [31:0] main_reset_timeout;
 reg [11:0] menu_rom_addr;
 reg  [7:0] menu_rom_data;
 
-// generate hex e.g.: 
-// gzip -nc amiga.xml > amiga.xml.gz
-// xxd -c1 -p amiga.xml.gz > amiga_xml.hex
 reg [7:0] amiga_xml[1536];
 initial $readmemh("amiga_xml.hex", amiga_xml);
    
