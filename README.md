@@ -84,7 +84,7 @@ The necessary binaries can be found in the [project releases](https://github.com
 * With Disk Flashback you can mount ADF's & HDF's under Windows [Disk Flashback](https://robsmithdev.co.uk/diskflashback)
 
 ## Rigid Disk Block Info
-Please make sure to use RDB (Rigid Disk Block) images with a **Start Offset 0**.
+Please make sure to use RDB (Rigid Disk Block) images with a **Start Offset 0**.  
 If unallocated space is present before the RDB, the HDF image won't be recognized.
 
 
