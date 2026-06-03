@@ -410,8 +410,8 @@ always @(posedge clk_sys) begin
       // check if amiga wants to read a sector
       if(!sdc_busy && !ide_sdc_rd && ide_exec == IDE_EXEC_READ_SECTOR ) begin
 	 // this really only works with HW multipliers in the FPGA
-	 ide_sdc_sector <= (ide_cylinder * heads[0] + ide_head) * sectors[0] +
-			   ide_sector - 1;
+	 ide_sdc_sector <= (ide_cylinder * heads[ide_drv] + ide_head) * sectors[ide_drv] +
+                  ide_sector - 1;
 
 	 // TODO: check why this message comes twice, the test for !ide_sdc_rd
 	 // should prevent that
@@ -426,8 +426,8 @@ always @(posedge clk_sys) begin
       // check if amiga wants to write
       if (!sdc_busy && !ide_sdc_wr && ide_exec == IDE_EXEC_WRITE_SECTOR ) begin
 	 // this really only works with HW multipliers in the FPGA
-	 ide_sdc_sector <= (ide_cylinder * heads[0] + ide_head) * sectors[0] +
-			   ide_sector - 1;
+	 ide_sdc_sector <= (ide_cylinder * heads[ide_drv] + ide_head) * sectors[ide_drv] +
+                  ide_sector - 1;
 	 
 	 $display("IDE%0d WR %0d/%0d/%0d -> %0d", ide_drv, 
 		  ide_cylinder, ide_head, ide_sector, 
@@ -658,11 +658,11 @@ always @(posedge clk_sys) begin
 	      // advance to next sector
 	      // ide_sector goes from 1 to sectors,
 	      // ide_head goes from 0 to heads-1
-	      if ( ide_sector < sectors[0] )
+		   if ( ide_sector < sectors[ide_drv] )
 		ide_sector <= ide_sector + 8'd1;
 	      else begin
 		 ide_sector <= 8'd1;
-		 if( ide_head < heads[0]-1 )
+			  if( ide_head < heads[ide_drv]-1 )
 		   ide_head <= ide_head + 8'd1;
 		 else begin
 		    ide_head <= 8'd0;
