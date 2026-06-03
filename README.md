@@ -83,6 +83,10 @@ The necessary binaries can be found in the [project releases](https://github.com
   * Use ADF-Opus to create and modify ADF images under Windows [ADFOpus2025](https://github.com/chironb/ADFOpus2025)
 * With Disk Flashback you can mount ADF's & HDF's under Windows [Disk Flashback](https://robsmithdev.co.uk/diskflashback)
 
+## Rigid Disk Block Info
+Please make sure to use RDB (Rigid Disk Block) images with a **Start Offset 0**.
+If unallocated space is present before the RDB, the HDF image won't be recognized.
+
 
 ## Credits
 Many thanks to **Alastair M. Robinson** ([robinsonb5](https://github.com/robinsonb5)) for his contributions to the **NanoMig**, in particular **Fastram** and **68020** cpu! 
