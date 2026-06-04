@@ -131,6 +131,10 @@
 	<listentry label="Wide" value="2"/>
       </list>
       <!--END-->
+      <!-- the vertical lcd size is not sufficient for PAL, so position can be adjusted -->
+      <!--IS tang_nano20k_lcd -->
+      <range label="LCD V-Pos" id="B" min="-32" max="32" default="0"/>      
+      <!--END-->
       <button label="Save settings" action="save"/>
     </menu>
     <button label="Reset" action="reset_hide"/>
