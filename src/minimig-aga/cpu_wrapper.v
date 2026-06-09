@@ -24,8 +24,12 @@
 //--------------------------------------------------------------------------//
 //--------------------------------------------------------------------------//
 
-// `define ENABLE_TG68K
-`define ENABLE_FX68K
+// if no CPU has explicitely been enabled, then only the fx68k is being used
+`ifndef ENABLE_TG68K
+  `ifndef ENABLE_FX68K
+    `define ENABLE_FX68K
+  `endif
+`endif
 
 `define TG68K_A24      // limit address space of TG68K to 24 bit
 
@@ -278,15 +282,15 @@ wire        reset_out_o;
 fx68k cpu_inst_o
 (
 	.clk(clk),
-	.enPhi1(ph1),
-	.enPhi2(ph2),
+	.enPhi1( ph1 ),
+	.enPhi2( ph2 ),
 
 `ifdef ENABLE_TG68K
 	.extReset(~reset && ~cpucfg[1]),
 	.pwrUp(~reset && ~cpucfg[1]),
 `else
-	.extReset(~reset),
-	.pwrUp(~reset),
+	.extReset( ~reset ),
+	.pwrUp( ~reset ),
 `endif
 	.oRESETn(reset_out_o),
 	.HALTn(1),
@@ -326,8 +330,8 @@ always @(posedge clk) begin
 		dcache_d    <= 0;
 	end
 	else if (~cpu_req) begin	// No mem access, so safe to switch chipram access mode
-		turbochip_d <= cachecfg[0]/* & cpucfg[1]*/; // FIXME, always only for testing
-		turbokick_d <= cachecfg[1]/* & cpucfg[1]*/;
+		turbochip_d <= cachecfg[0] & cpucfg[1]; // turbo chip for 020+
+		turbokick_d <= cachecfg[1] & cpucfg[1]; //     - kick -
 		dcache_d    <= cachecfg[2];
 	end
 end

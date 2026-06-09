@@ -28,6 +28,8 @@
 // - suppress ready bit for drives not present
 // - reduce buffer size when only HDDs are being used
 
+`ifndef DISABLE_IDE
+
 module ide
 (
 	input             clk,
@@ -283,7 +285,7 @@ always @(posedge clk) n_data_r <= {n_data_r[0], n_data};
 wire [31:0] buf_readdata;
 wire [31:0] buf_q;
 
-`ifndef VERILATOR
+`ifndef INFER_DPRAM
 ide_dpram io_buf0
 (
 	.clka(clk),
@@ -325,7 +327,7 @@ ide_dpram io_buf1
         .oceb(1'b1),
 	.doutb(buf_q[31:16])
 );
-`else // !`ifdef VERILATOR
+`else // !`ifdef INFER_DPRAM
 
 reg [31:0] buf_readdataR;
 assign buf_readdata = buf_readdataR;
@@ -365,3 +367,5 @@ end
 //------------------------------------------------------------------------------
 
 endmodule
+
+`endif // DISABLE_IDE

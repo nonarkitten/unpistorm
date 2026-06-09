@@ -38,7 +38,7 @@ EXTRA_LDFLAGS = `sdl2-config --libs` -lSDL2_image
 all: $(PRJ)
 
 $(PRJ): $(TB).cpp sd_card.cpp sd_card_config.h ${HDL_FILES} Makefile
-	verilator -O3 -Wno-fatal --no-timing --trace-fst --threads 1 --trace-underscore  -top-module $(PRJ)_tb $(VERILATOR_FLAGS) -cc ${HDL_FILES} --exe $(TB).cpp sd_card.cpp -o ../$(PRJ) -CFLAGS "${EXTRA_CFLAGS}" -LDFLAGS "${EXTRA_LDFLAGS}"
+	verilator -O3 -DINFER_DPRAM -Wno-fatal --no-timing --trace-fst --threads 1 --trace-underscore  -top-module $(PRJ)_tb $(VERILATOR_FLAGS) -cc ${HDL_FILES} --exe $(TB).cpp sd_card.cpp -o ../$(PRJ) -CFLAGS "${EXTRA_CFLAGS}" -LDFLAGS "${EXTRA_LDFLAGS}"
 	make -j -C ${OBJ_DIR} -f V$(PRJ)_tb.mk
 
 $(PRJ).fst: $(PRJ)

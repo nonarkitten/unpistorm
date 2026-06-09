@@ -21,7 +21,6 @@ module nanomig (
    // misc
    output	 pwr_led,
    output	 fdd_led,
-   output	 hdd_led,
 
    // video
    output	 hs, // horizontal sync
@@ -35,7 +34,10 @@ module nanomig (
    input [5:0]	 chipset_config,
    input [3:0]	 floppy_config,
    input [3:0]	 video_config,
+`ifndef DISABLE_IDE
    input [5:0]	 ide_config,
+   output	 hdd_led,
+`endif
 		
    output [14:0] audio_left, // left DAC data
    output [14:0] audio_right, // right DAC data
@@ -75,18 +77,20 @@ module nanomig (
    output	 _ram_bhe, // sram upper byte select
    output	 _ram_ble, // sram lower byte select
    output	 _ram_we, // sram write enable
-   output        _ram_oe,     // sram output enable
+   output	 _ram_oe, // sram output enable
 
-   output reg    fastram_sel,
+   output reg	 fastram_sel,
    output [22:1] fastram_addr,
-   output        fastram_lds,
-   output        fastram_uds,
-   input  [15:0] fastram_dout,
+   output	 fastram_lds,
+   output	 fastram_uds,
+   input [15:0]	 fastram_dout,
    output [15:0] fastram_din,
-   output        fastram_wr,
-   input         fastram_ready
+   output	 fastram_wr,
+   input	 fastram_ready
 );
-`default_nettype none
+`ifndef LATTICE
+  `default_nettype none
+`endif
    
 wire cpu_rst;
 wire [15:0] ram_din;
@@ -284,10 +288,14 @@ assign ram_dout = fastram_dout;
 assign fastram_din = ram_din;
 assign fastram_wr = (cpu_state[1:0]==2'b11) ? 1'b1 : 1'b0;
 
+wire [7:0] sdc_byte_out_data_fdc;   
+wire [31:0] sdc_sector_fdc;  // from inside minimig/floppy
+
 // ==============================================================================
 // ===================================== IDE ====================================
 // ==============================================================================
-
+`ifndef DISABLE_IDE
+   
 // In a real minimig much of the IDE specific stuff is done on the
 // microcontroller side. The concept of NanoMig (and MiSTeryNano)
 // differs from this as only the necessary stuff is done on MCU
@@ -359,7 +367,6 @@ reg [31:0] ide_sdc_sector;
    
 reg [1:0] ide_reported;   
    
-wire [31:0] sdc_sector_fdc;  // from inside minimig/floppy
 assign sdc_sector = (ide_sdc_rd||ide_sdc_wr)?ide_sdc_sector:sdc_sector_fdc;      
 assign sdc_rd[7:4] = { 2'b00, ide_sdc_rd }; 
 assign sdc_wr[7:4] = { 2'b00, ide_sdc_wr }; 
@@ -1012,13 +1019,12 @@ end
    
 // IDE payload is being received in 16 bit words from but is being sent
 // as bytes to the SD card
-wire [7:0] sdc_byte_out_data_fdc;   
 reg [7:0] ide_readdataD;
 assign sdc_byte_out_data = ide_active?
 			   // get all odd bytes from latch except the first one which wasn't latched
 			   (!sdc_byte_addr[0]?ide_readdata[7:0]:((sdc_byte_addr==1)?ide_readdata[15:8]:ide_readdataD)):
 			   sdc_byte_out_data_fdc;   
-
+   
 // The sd card just requests addresses and minimig returns matching data. The ide uses ide_write
 // as a trigger signal to advance to the next (word) address. We thus generate a trigger
 // whenever the address sent by SD card changes. This can then be used as a write
@@ -1051,6 +1057,13 @@ wire ide_write = (!ide_exec_cnt[0] && (
 
      // forward the word every second byte received from the sd card
      ||((ide_exec == IDE_EXEC_SEND_PAYLOAD) && sdc_byte_in_strobe && sdc_byte_addr[0]));
+
+`else // !`ifndef DISABLE_IDE
+assign sdc_sector = sdc_sector_fdc;      
+assign sdc_rd[7:4] = 4'b0000; 
+assign sdc_wr[7:4] = 4'b0000; 
+assign sdc_byte_out_data = sdc_byte_out_data_fdc;
+`endif // !`ifndef DISABLE_IDE   
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -1095,8 +1108,10 @@ minimig minimig
         .memory_config (memory_config   ), // ram sizes
         .chipset_config(chipset_config  ), 
         .floppy_config (floppy_config   ), 
+`ifndef DISABLE_IDE
         .ide_config    (ide_config      ), 
-
+`endif
+ 
 	//sram pins
 	.ram_data     (ram_data         ), // SRAM data bus
 	.ramdata_in   (ramdata_in       ), // SRAM data bus in
@@ -1143,7 +1158,6 @@ minimig minimig
 	.kms_level    (kbd_mouse_level  ),
 	.pwr_led      (pwr_led_bright   ), // power led
 	.fdd_led      (fdd_led          ),
-	.hdd_led      (hdd_led          ),
 	.rtc          (RTC              ),
 
 	//video
@@ -1170,6 +1184,18 @@ minimig minimig
 	.cachecfg     (cachecfg ), // Cache config
 	.memcfg       ( ), // memory config
 
+`ifndef DISABLE_IDE
+	.hdd_led      (hdd_led          ),
+	.ide_fast     (                 ),
+	.ide_ext_irq  ( 1'b0            ),
+	.ide_ena      (                 ),
+	.ide_req      ( ide_request     ),
+	.ide_address  ( ide_address     ),
+	.ide_write    ( ide_write       ),
+	.ide_writedata( ide_writedata   ),
+	.ide_read     ( ide_read        ),
+	.ide_readdata ( ide_readdata    ),
+`endif
         // sd card interface for floppy disk emulation
         .sdc_img_mounted    ( sdc_img_mounted[3:0]  ),
         .sdc_img_size       ( sdc_img_size[31:0]    ),  // length of image file
@@ -1181,17 +1207,7 @@ minimig minimig
 	.sdc_byte_in_strobe ( sdc_byte_in_strobe    ),
 	.sdc_byte_addr      ( sdc_byte_addr         ),
 	.sdc_byte_in_data   ( sdc_byte_in_data      ),
- 	.sdc_byte_out_data  ( sdc_byte_out_data_fdc ),
- 
-	.ide_fast     (                 ),
-	.ide_ext_irq  ( 1'b0            ),
-	.ide_ena      (                 ),
-	.ide_req      ( ide_request     ),
-	.ide_address  ( ide_address     ),
-	.ide_write    ( ide_write       ),
-	.ide_writedata( ide_writedata   ),
-	.ide_read     ( ide_read        ),
-	.ide_readdata ( ide_readdata    )
+ 	.sdc_byte_out_data  ( sdc_byte_out_data_fdc ) 
 );
 
 Amber AMBER
@@ -1217,4 +1233,6 @@ Amber AMBER
  );
     
 endmodule
-`default_nettype wire
+`ifndef LATTICE
+  `default_nettype wire
+`endif

@@ -304,7 +304,7 @@ always @(posedge clk) begin
 	   if(sdc_byte_in_strobe) begin
 	      if(sdc_byte_addr[0])  fd_dma_buf_odd[sdc_byte_addr[8:1]] <= sdc_byte_in_data;
 	      else                  fd_dma_buf_even[sdc_byte_addr[8:1]] <= sdc_byte_in_data;
-	      fd_dma_csum[sdc_byte_addr[1:0]] = 8'haa |
+	      fd_dma_csum[sdc_byte_addr[1:0]] <= 8'haa |
 				     fd_dma_csum[sdc_byte_addr[1:0]] ^
 				     sdc_byte_in_data ^ {1'b0, sdc_byte_in_data[7:1]};
 

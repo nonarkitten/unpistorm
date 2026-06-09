@@ -209,14 +209,16 @@ module minimig
 	input [7:0]   kbd_mouse_data,
 	output	      pwr_led, // power led
 	output	      fdd_led, // disk activity LED, active when DMA is on
-	output	      hdd_led,
 	input [64:0]  rtc,
 
 	input [7:0]   memory_config,
 	input [5:0]   chipset_config,
 	input [3:0]   floppy_config,
+`ifndef DISABLE_IDE
 	input [5:0]   ide_config,
-
+	output	      hdd_led,
+`endif
+ 
         // Interface MiSTeryNano sd card interface. This very simple connection allows the core
         // to request sectors from within a OSD selected image file
 	input [3:0]   sdc_img_mounted,
@@ -260,10 +262,7 @@ module minimig
 	output [15:0] toccata_aud_right,
 `endif
  
-	//user i/o
-	input [1:0]   cpucfg,
-	input [2:0]   cachecfg,
-	output [6:0]  memcfg,
+`ifndef DISABLE_IDE
 	output	      ide_ena,
 
 	output	      ide_fast,
@@ -273,10 +272,17 @@ module minimig
 	input	      ide_write,
 	input [15:0]  ide_writedata,
 	input	      ide_read,
-	output [15:0] ide_readdata
-);
-`default_nettype none
-   
+	output [15:0] ide_readdata,
+`endif
+	//user i/o
+	input [1:0]   cpucfg,
+	input [2:0]   cachecfg,
+	output [6:0]  memcfg
+	);
+`ifndef LATTICE
+  `default_nettype none
+`endif  
+  
 //--------------------------------------------------------------------------------------
 
 parameter [0:0] NTSC = 1'b0;	//Agnus type (PAL/NTSC)
@@ -295,7 +301,9 @@ wire [15:0] paula_data_out;	//paula data bus out
 wire [15:0] denise_data_out;	//denise data bus out
 wire [15:0] user_data_out;	   //user IO data out
 wire [15:0] gary_data_out;	   //data out from memory bus multiplexer
+`ifndef DISABLE_IDE
 wire [15:0] gayle_data_out;	//Gayle data out
+`endif
 wire [15:0] cia_data_out;	   //cia A+B data bus out
 wire [15:0] ar3_data_out;	   //Action Replay data out
 
@@ -382,7 +390,7 @@ assign      hblank = blver ? ~hde : hbl;
 
 wire        bls;					//blitter slowdown - required for sharing bus cycles between Blitter and CPU
 
-wire        cpurst;
+wire        cpurst = 1'b0;    // TODO: check why this is unused
 wire        cpuhlt;
 
 wire        int7;					//int7 interrupt request from Action Replay
@@ -393,11 +401,13 @@ wire [15:0] cart_data_out;
 wire        usrrst;				//user reset from osd interface
 wire        hires;				//hires signal from Denise for interpolation filter enable in Amber
 
+`ifndef DISABLE_IDE
 //gayle stuff
 wire        sel_ide;				//select IDE drive registers
 wire        sel_gayle;			//select GAYLE control registers
 wire        gayle_irq;			//interrupt request
 wire        gayle_nrdy;       // HDD fifo is not ready for reading
+`endif
 
 wire	[7:0] bank;					//memory bank select
 
@@ -428,9 +438,11 @@ assign memcfg = {memory_config[7],memory_config[5:0]};
 // NTSC/PAL switching is controlled by OSD menu, change requires reset to take effect
 always @(posedge clk) if (clk7_en && reset) ntsc <= chipset_config[1];
 
+`ifndef DISABLE_IDE
 assign ide_ena  = ide_config[0];
 assign ide_fast = ~ide_config[5] & cpucfg[1];
-
+`endif
+   
 //--------------------------------------------------------------------------------------
 
 //instantiate agnus
@@ -499,7 +511,11 @@ paula PAULA1
 	.sof(sof),
 	.strhor(strhor_paula),
 	.vblint(vbl_int),
+ `ifndef DISABLE_IDE
 	.int2(int2|(ide_fast ? ide_ext_irq : gayle_irq)),
+`else
+	.int2(int2), 
+ `endif
 	.int3(int3),
 	.int6(int6 | int6_toccata),
 	._ipl(_iplx),
@@ -658,7 +674,11 @@ minimig_m68k_bridge CPU1
 	.dbr(dbr),
 	.dbs(dbs),
 	.xbs(xbs),
+`ifndef DISABLE_IDE
 	.nrdy(gayle_nrdy & rd_cyc),
+`else
+	.nrdy(1'b0),
+`endif
 	.bls(bls),
 	.memory_config(memory_config[3:0]),
 	._as(_cpu_as),
@@ -782,7 +802,11 @@ gary GARY1
 	.dbs(dbs),
 	.xbs(xbs),
 	.memory_config(memory_config[3:0]),
-	.hdc_ena(ide_ena & ~ide_fast), // Gayle decoding enable	
+`ifndef DISABLE_IDE
+	.hdc_ena(ide_ena & ~ide_fast), // Gayle decoding enable
+`else
+	.hdc_ena(1'b0),
+`endif
 `ifdef ENABLE_TOCCATA
 	.toccata_ena(toccata_ena),
 	.toccata_base(toccata_base),
@@ -801,8 +825,10 @@ gary GARY1
 	.sel_reg(sel_reg),
 	.sel_cia_a(sel_cia_a),
 	.sel_cia_b(sel_cia_b),
+`ifndef DISABLE_IDE
 	.sel_ide(sel_ide),
 	.sel_gayle(sel_gayle),
+`endif
 	.sel_rtc(sel_rtc),
 `ifdef ENABLE_TOCCATA
 	.sel_toccata(sel_toccata),
@@ -813,6 +839,7 @@ gary GARY1
 	.bootrom(1'b0)
 );
 
+`ifndef DISABLE_IDE
 gayle GAYLE1
 (
 	.clk(clk),
@@ -836,6 +863,7 @@ gayle GAYLE1
 
 	.led(hdd_led)
 );
+`endif
    
 //instantiate system control
 minimig_syscontrol CONTROL1 
@@ -906,7 +934,9 @@ assign int6_toccata = 1'b0;
 //data multiplexer
 assign cpu_data_in[15:0]= gary_data_out[15:0]
 							 | cia_data_out[15:0]
+`ifndef DISABLE_IDE
 							 | gayle_data_out[15:0]
+`endif
 `ifdef ENABLE_CART
 							 | cart_data_out[15:0]
 `endif
@@ -942,4 +972,6 @@ assign rst_out = reset;
 
 endmodule
 
-`default_nettype wire
+`ifndef LATTICE
+  `default_nettype wire
+`endif

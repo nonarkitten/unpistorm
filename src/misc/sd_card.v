@@ -156,8 +156,8 @@ wire	   direct_enable = direct_start[drive] != 32'd0;
    
 wire [7:0] doutb;
 reg  dinb_we;
-
-`ifdef VERILATOR
+   
+`ifdef INFER_DPRAM
 sector_dpram #(8, 9) buffer
 (
 	.clock(clk),
@@ -695,7 +695,7 @@ sd_rw #(.CLK_DIV(CLK_DIV), .SIMULATE(SIMULATE)) sd_rw (
 
 endmodule // sd_card
 
-`ifdef VERILATOR
+`ifdef INFER_DPRAM
 module sector_dpram #(parameter DATAWIDTH=8, ADDRWIDTH=8)
 (
  input 						clock,

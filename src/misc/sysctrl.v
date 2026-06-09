@@ -96,8 +96,8 @@ always @(posedge clk) begin
 
       buttons_irq_enable <= 1'b1;  // allow buttons irq
       int_ack <= 8'h00;
-      coldboot = 1'b1;      // reset is actually the power-on-reset
-      sys_int = 1'b1;       // coldboot interrupt
+      coldboot <= 1'b1;      // reset is actually the power-on-reset
+      sys_int <= 1'b1;       // coldboot interrupt
       jtagsel <= 1'b0;      
 
       // OSD value defaults. These should be sane defaults, but the MCU

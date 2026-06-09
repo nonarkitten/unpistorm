@@ -4,6 +4,7 @@ source scripts/update_xml.tcl
 
 set_device GW2AR-LV18QN88C8/I7 -name GW2AR-18C
 
+add_file tang/nano20k/top.sv
 add_file nanomig.v
 add_file minimig-aga/amiga_clk.v
 add_file minimig-aga/cpu_wrapper.v
@@ -83,7 +84,6 @@ add_file tang/nano20k/amigaclks.v
 add_file misc/flash_dspi.v
 add_file tang/nano20k/gowin_dpb/sector_dpram.v
 add_file tang/nano20k/gowin_dpb/ide_dpram.v
-add_file tang/nano20k/top.sv
 add_file misc/sdram.sv
 add_file tang/nano20k/nanomig.cst
 add_file tang/nano20k/nanomig.sdc

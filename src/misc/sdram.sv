@@ -33,7 +33,7 @@
 
 
 module sdram #(parameter DATA_WIDTH=16, RASCAS_DELAY=1, RAS_WIDTH=13, CAS_WIDTH=9) (
-	inout reg [DATA_WIDTH-1:0] sd_data, // 16/32 bit bidirectional data bus
+	inout [DATA_WIDTH-1:0] sd_data, // 16/32 bit bidirectional data bus
 	output reg [RAS_WIDTH-1:0] sd_addr, // multiplexed address bus
 	output reg [(DATA_WIDTH/8)-1:0]  sd_dqm, // two/four byte masks
 	output reg [1:0]  sd_ba,  // four banks
@@ -64,7 +64,9 @@ module sdram #(parameter DATA_WIDTH=16, RASCAS_DELAY=1, RAS_WIDTH=13, CAS_WIDTH=
 	input		  p2_we,   // cpu/chipset requests write
 	output reg        p2_ack
 );
-`default_nettype none
+`ifndef LATTICE
+  `default_nettype none
+`endif
 
 localparam BURST_LENGTH   = 3'b000; // 000=1, 001=2, 010=4, 011=8
 localparam ACCESS_TYPE    = 1'b0;   // 0=sequential, 1=interleaved
@@ -150,7 +152,7 @@ localparam CMD_PRECHARGE       = 3'b010;
 localparam CMD_AUTO_REFRESH    = 3'b001;
 localparam CMD_LOAD_MODE       = 3'b000;
 
-reg [3:0] sd_cmd;   // current command sent to sd ram
+reg [2:0] sd_cmd;   // current command sent to sd ram
 // drive control signals according to current command
 assign sd_cs  = 1'b0;
 assign sd_ras = sd_cmd[2];
@@ -308,4 +310,6 @@ always @(posedge clk) begin
 end
    
 endmodule
-`default_nettype wire
+`ifndef LATTICE
+  `default_nettype wire
+`endif

@@ -54,8 +54,14 @@ module hdmi
     input logic [AUDIO_BIT_WIDTH-1:0] audio_sample_word [1:0],
 
     // These outputs go to your HDMI port
-    output logic [2:0] 		      tmds,
-    output logic 		      tmds_clock
+`ifdef TMDS_BY_LOGIC
+    output logic [5:0] tmds,       // 6+2 pins/pmod used for hdmi
+    output logic [1:0] tmds_clock
+`else
+   // These outputs go to your HDMI port
+    output logic [2:0] tmds,
+    output logic tmds_clock
+`endif    
 );
 
 localparam int NUM_CHANNELS = 3;
@@ -231,7 +237,7 @@ generate
             begin
                 mode <= 3'd2;
                 video_data <= 24'd0;
-                control_data = 6'd0;
+                control_data <= 6'd0;
                 data_island_data <= 12'd0;
             end
             else
