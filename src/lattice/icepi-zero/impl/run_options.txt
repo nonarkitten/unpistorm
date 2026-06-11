@@ -1,0 +1,173 @@
+#--  Synopsys, Inc.
+#--  Version V-2023.09L-2
+#--  Project file impl/run_options.txt
+#--  Written on Thu Jun 11 08:32:57 2026
+
+
+#project files
+add_file -verilog -vlog_std sysv "../../lattice/icepi-zero/top.sv"
+add_file -verilog -vlog_std sysv "../../nanomig.v"
+add_file -verilog -vlog_std sysv "../../misc/mcu_spi.v"
+add_file -verilog -vlog_std sysv "../../misc/hid.v"
+add_file -verilog -vlog_std sysv "../../misc/sysctrl.v"
+add_file -verilog -vlog_std sysv "../../misc/amiga_keymap.v"
+add_file -verilog -vlog_std sysv "../../misc/flash_dspi.v"
+add_file -verilog -vlog_std sysv "../../misc/osd_u8g2.v"
+add_file -verilog -vlog_std sysv "../../misc/sd_card.v"
+add_file -verilog -vlog_std sysv "../../misc/sd_rw.v"
+add_file -verilog -vlog_std sysv "../../misc/sdcmd_ctrl.v"
+add_file -verilog -vlog_std sysv "../../misc/sdram.sv"
+add_file -verilog -vlog_std sysv "../../misc/video_analyzer.v"
+add_file -verilog -vlog_std sysv "../../hdmi/audio_clock_regeneration_packet.sv"
+add_file -verilog -vlog_std sysv "../../hdmi/audio_info_frame.sv"
+add_file -verilog -vlog_std sysv "../../hdmi/audio_sample_packet.sv"
+add_file -verilog -vlog_std sysv "../../hdmi/auxiliary_video_information_info_frame.sv"
+add_file -verilog -vlog_std sysv "../../hdmi/hdmi.sv"
+add_file -verilog -vlog_std sysv "../../hdmi/packet_assembler.sv"
+add_file -verilog -vlog_std sysv "../../hdmi/packet_picker.sv"
+add_file -verilog -vlog_std sysv "../../hdmi/serializer.sv"
+add_file -verilog -vlog_std sysv "../../hdmi/source_product_description_info_frame.sv"
+add_file -verilog -vlog_std sysv "../../hdmi/tmds_channel.sv"
+add_file -verilog -vlog_std sysv "../../minimig/Amber.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_audiodma.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_beamcounter.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_bitplanedma.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_blitter.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_blitter_adrgen.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_blitter_barrelshifter.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_blitter_fill.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_blitter_minterm.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_copper.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_diskdma.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_refresh.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/agnus_spritedma.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/amiga_clk.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/cia_int.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/cia_timera.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/cia_timerb.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/cia_timerd.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/ciaa.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/ciab.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/cpu_wrapper.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_bitplane_shifter.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_bitplanes.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_collision.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_colortable.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_colortable_ram_mf.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_hamgenerator.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_playfields.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_spritepriority.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_sprites.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/denise_sprites_shifter.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/gary.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/ide.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/minimig.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/minimig_bankmapper.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/minimig_m68k_bridge.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/minimig_sram_bridge.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/minimig_syscontrol.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/paula.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/paula_audio.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/paula_audio_channel.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/paula_audio_mixer.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/paula_audio_volume.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/paula_floppy.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/paula_floppy_fifo.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/paula_intcontroller.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/paula_uart.v"
+add_file -verilog -vlog_std sysv "../../minimig-aga/userio.v"
+add_file -verilog -vlog_std sysv "../../fx68k/fx68k.sv"
+add_file -verilog -vlog_std sysv "../../fx68k/fx68kAlu.sv"
+add_file -verilog -vlog_std sysv "../../fx68k/uaddrPla.sv"
+add_file -verilog -vlog_std sysv "../../lattice/icepi-zero/pll_142m.v"
+add_file -vhdl -lib work "../../tg68k/TG68K_Pack.vhd"
+add_file -vhdl -lib work "../../tg68k/TG68K_ALU.vhd"
+add_file -vhdl -lib work "../../tg68k/TG68KdotC_Kernel.vhd"
+add_file -vhdl -lib work "../../tg68k/TG68K.vhd"
+
+
+#implementation: "impl"
+impl -add impl -type fpga
+
+#
+#implementation attributes
+
+set_option -vlog_std sysv
+set_option -num_critical_paths 3
+set_option -project_relative_includes 1
+set_option -include_path {../../fx68k;../../misc;../../lattice/icepi-zero}
+
+#device options
+set_option -technology ECP5U
+set_option -part LFE5U_25F
+set_option -package TG144C
+set_option -speed_grade -6
+set_option -part_companion ""
+
+#compilation/mapping options
+set_option -top_module "top"
+
+# hdl_compiler_options
+set_option -distributed_compile 0
+set_option -scm2hydra 0
+set_option -scm2hydra_preserve_rtl_sig 1
+set_option -hdl_strict_syntax 0
+
+# mapper_without_write_options
+set_option -frequency 200
+set_option -srs_instrumentation 1
+
+# mapper_options
+set_option -write_verilog 0
+set_option -write_structural_verilog 0
+set_option -write_vhdl 0
+
+# Lattice XP
+set_option -maxfan 1000
+set_option -disable_io_insertion 0
+set_option -retiming 0
+set_option -pipe 1
+set_option -infer_seqShift 1
+set_option -forcegsr auto
+set_option -fix_gated_and_generated_clocks 1
+set_option -rw_check_on_ram 1
+set_option -update_models_cp 0
+set_option -syn_edif_array_rename 1
+set_option -Write_declared_clocks_only 1
+set_option -seqshift_no_replicate 0
+set_option -run_design_rule_checker 0
+set_option -design_rule_fanout_limit 0
+set_option -acp_debug_info 0
+
+# NFilter
+set_option -no_sequential_opt 0
+
+# common_options
+set_option -add_dut_hierarchy 0
+set_option -prepare_readback 0
+
+# flow_options
+set_option -slr_aware_debug 0
+
+# sequential_optimization_options
+set_option -symbolic_fsm_compiler 1
+
+# Compiler Options
+set_option -compiler_compatible 0
+set_option -resource_sharing 1
+set_option -multi_file_compilation_unit 1
+
+# Compiler Options
+set_option -auto_infer_blackbox 0
+
+#automatic place and route (vendor) options
+set_option -write_apr_constraint 1
+
+#set result format/file last
+project -result_file "./nanomig_impl.edi"
+
+#set log file 
+set_option log_file "../../lattice/icepi-zero/impl/nanomig_impl.srf" 
+impl -active "impl"
