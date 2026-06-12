@@ -602,6 +602,7 @@ nanomig nanomig
  
  .memory_config(memory_config),
  .fastram_config(fastram_config),
+ .cpu_config(osd_cpu),
  .chipset_config(chipset_config),
  .floppy_config(floppy_config),
  .video_config(video_config),
