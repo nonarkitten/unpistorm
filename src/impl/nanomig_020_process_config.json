@@ -51,7 +51,7 @@
  "MULTIJUMP_MODE" : "Single",
  "MULTIJUMP_SPI_FLASH_ADDRESS" : "000000",
  "Multi_Boot" : true,
- "OUTPUT_BASE_NAME" : "nanomig",
+ "OUTPUT_BASE_NAME" : "nanomig_020",
  "POWER_ON_RESET_MONITOR" : true,
  "PRINT_BSRAM_MODE" : "Default Mode",
  "PRINT_BSRAM_VALUE" : true,

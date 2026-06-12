@@ -132,6 +132,7 @@ wire [1:0] osd_floppy_drives;
 wire       osd_floppy_turbo;
 wire       osd_floppy_wrprot;
 wire       osd_ide_enable;
+wire [1:0] osd_cpu;             // 00=68000, 01=68010, 11=68020
 wire [1:0] osd_chipset;         // 0=OCS-A500, 1=OCS-A1000, 2=ECS
 wire       osd_video_mode;      // PAL (0=PAL, 1=NTSC)
 wire [1:0] osd_video_screen;    // 0=standard, 1=overscan, 2=wide screen (jailbars)
@@ -140,7 +141,6 @@ wire [1:0] osd_video_scanlines;
 wire       osd_joy_swap;        // 0=off, 1=on
 wire [2:0] osd_volume;          // Mute=0, 1=25%, 2=50%, 3=75%, 4=100%
 wire       osd_stereo_mix;      // 0=off, 1=on
-wire [1:0] osd_cpu;             // 0=68000, 1=68010, 2=68020
 wire	   rom_download_in_progress;
 
 // generate a reset for some time after rom has been initialized

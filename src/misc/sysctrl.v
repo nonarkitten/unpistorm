@@ -33,6 +33,7 @@ module sysctrl (
   output reg [1:0]  system_floppy_drives,
   output reg	    system_floppy_wrprot,
   output reg	    system_floppy_turbo,
+  output reg [1:0]  system_cpu,
   output reg [1:0]  system_chipset,
   output reg	    system_video_mode,
   output reg [1:0]  system_video_screen,
@@ -45,7 +46,6 @@ module sysctrl (
   output reg	    system_joy_swap,
   output reg [2:0]  system_volume,
   output reg	    system_stereo_mix,
-  output reg [1:0]  system_cpu,
   output reg [7:0]  system_lcd_v_pos
 );
 
@@ -118,7 +118,7 @@ always @(posedge clk) begin
       system_joy_swap <= 1'b1;
       system_volume <= 3'b010;  
 	  system_stereo_mix <= 1'b1;
-      system_cpu <= 2'd2;  // default to 68020
+      system_cpu <= 2'b11;  // default to 68020
    end 
    else 
    begin // if (reset)
