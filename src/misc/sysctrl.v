@@ -45,6 +45,7 @@ module sysctrl (
   output reg	    system_joy_swap,
   output reg [2:0]  system_volume,
   output reg	    system_stereo_mix,
+  output reg [1:0]  system_cpu,
   output reg [7:0]  system_lcd_v_pos
 );
 
@@ -117,6 +118,7 @@ always @(posedge clk) begin
       system_joy_swap <= 1'b1;
       system_volume <= 3'b010;  
 	  system_stereo_mix <= 1'b1;
+      system_cpu <= 2'd2;  // default to 68020
    end 
    else 
    begin // if (reset)
@@ -210,6 +212,8 @@ always @(posedge clk) begin
 		   if(id == "P") system_floppy_wrprot <= data_in[0];
 		   // Value "C": chipset OCS-A500(0), OCS-A1000(1) or ECS(2)
 		   if(id == "C") system_chipset <= data_in[1:0];
+		   // Value "T": CPU 68000(0), 68010(1) or 68020(2)
+		   if(id == "T") system_cpu <= data_in[1:0];
 		   // Value "F": video filter none(0), h(1), v(2) or h+v(3)
 		   if(id == "F") system_video_filter <= data_in[1:0];
 		   // Value "V": PAL(0) or NTSC(1) video

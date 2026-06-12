@@ -38,6 +38,13 @@
   <menu label="NanoMig">
     <fileselector label="Floppy DF0:" ext="adf" index="0"/>
     <menu label="System">
+  <!--IS TG68K -->
+	    <list label="CPU:" id="T" default="2" action="reset">
+	<listentry label="68000" value="0"/>
+	<listentry label="68010" value="1"/>
+	<listentry label="68020" value="2"/>
+      </list>
+	<!--END-->
       <list label="Chipset:" id="C" default="2" action="reset">
 	<listentry label="OCS-A500" value="0"/>
 	<listentry label="OCS-A1000" value="1"/>
