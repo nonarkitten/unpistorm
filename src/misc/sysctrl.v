@@ -105,7 +105,8 @@ always @(posedge clk) begin
       // will very likely override these early
       system_floppy_drives <= 2'd0;
       system_floppy_turbo <= 1'b1;      
-      system_floppy_wrprot <= 1'b1;      
+      system_floppy_wrprot <= 1'b1; 
+	  system_cpu <= 2'b11;     
       system_chipset <= 2'd2;      
       system_video_mode <= 1'b0;      
       system_video_screen <= 2'd0;      
