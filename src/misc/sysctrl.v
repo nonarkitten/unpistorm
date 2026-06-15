@@ -106,6 +106,7 @@ always @(posedge clk) begin
       system_floppy_drives <= 2'd0;
       system_floppy_turbo <= 1'b1;      
       system_floppy_wrprot <= 1'b1;      
+      system_cpu <= 2'd3;  
       system_chipset <= 2'd2;      
       system_video_mode <= 1'b0;      
       system_video_screen <= 2'd0;      
@@ -118,7 +119,6 @@ always @(posedge clk) begin
       system_joy_swap <= 1'b1;
       system_volume <= 3'b010;  
 	  system_stereo_mix <= 1'b1;
-      system_cpu <= 2'b11;  // default to 68020
    end 
    else 
    begin // if (reset)

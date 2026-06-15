@@ -233,12 +233,12 @@ TG68KdotC_Kernel
 // verilator runs the verilog translated variant which doesn't support configuration but
 // is hard coded for full configurability (all configs set to 2)
 #(
-	.sr_read(2),        // 0=>user,   1=>privileged,    2=>switchable with CPU(0)
-	.vbr_stackframe(2), // 0=>no,     1=>yes/extended,  2=>switchable with CPU(0)
-	.extaddr_mode(2),   // 0=>no,     1=>yes,           2=>switchable with CPU(1)
-	.mul_mode(2),       // 0=>16Bit,  1=>32Bit,         2=>switchable with CPU(1),  3=>no MUL,
-	.div_mode(2),       // 0=>16Bit,  1=>32Bit,         2=>switchable with CPU(1),  3=>no DIV,
-	.bitfield(2)        // 0=>no,     1=>yes,           2=>switchable with CPU(1)
+	.sr_read(1),        // 0=>user,   1=>privileged,    2=>switchable with CPU(0)
+	.vbr_stackframe(1), // 0=>no,     1=>yes/extended,  2=>switchable with CPU(0)
+	.extaddr_mode(1),   // 0=>no,     1=>yes,           2=>switchable with CPU(1)
+	.mul_mode(1),       // 0=>16Bit,  1=>32Bit,         2=>switchable with CPU(1),  3=>no MUL,
+	.div_mode(1),       // 0=>16Bit,  1=>32Bit,         2=>switchable with CPU(1),  3=>no DIV,
+	.bitfield(1)        // 0=>no,     1=>yes,           2=>switchable with CPU(1)
 )
 `endif
 cpu_inst_p

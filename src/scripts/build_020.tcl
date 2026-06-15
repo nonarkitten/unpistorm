@@ -1,4 +1,4 @@
-set board "tang_nano20k"
+set board "tang_nano20k_020"
 set config "amiga"
 source scripts/update_xml.tcl
 
@@ -57,9 +57,6 @@ add_file minimig-aga/minimig_sram_bridge.v
 add_file minimig-aga/minimig_syscontrol.v
 add_file minimig-aga/userio.v
 add_file minimig/Amber.v
-add_file fx68k/fx68k.sv
-add_file fx68k/fx68kAlu.sv
-add_file fx68k/uaddrPla.sv
 add_file hdmi/audio_clock_regeneration_packet.sv
 add_file hdmi/audio_info_frame.sv
 add_file hdmi/audio_sample_packet.sv

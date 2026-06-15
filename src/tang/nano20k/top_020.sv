@@ -10,8 +10,7 @@
 */
 
 // TG68K CPU is set by default 
-// CPU type can be selected in the menu
-// 68000/68010/68020
+// CPU type can be selected in the menu (68000/68010/68020)
 
 `define ENABLE_TG68K
 
@@ -132,7 +131,7 @@ wire [1:0] osd_floppy_drives;
 wire       osd_floppy_turbo;
 wire       osd_floppy_wrprot;
 wire       osd_ide_enable;
-wire [1:0] osd_cpu;             // 00=68000, 01=68010, 11=68020
+wire [1:0] osd_cpu;             // 0=68000, 1=68010, 2=68020
 wire [1:0] osd_chipset;         // 0=OCS-A500, 1=OCS-A1000, 2=ECS
 wire       osd_video_mode;      // PAL (0=PAL, 1=NTSC)
 wire [1:0] osd_video_screen;    // 0=standard, 1=overscan, 2=wide screen (jailbars)
@@ -458,6 +457,7 @@ sysctrl sysctrl (
 		.system_floppy_turbo(osd_floppy_turbo),
 		.system_floppy_wrprot(osd_floppy_wrprot),
 		.system_ide_enable(osd_ide_enable),
+        .system_cpu(osd_cpu),
 	    .system_chipset(osd_chipset),
 		.system_video_mode(osd_video_mode),
 		.system_video_screen(osd_video_screen),
@@ -469,7 +469,6 @@ sysctrl sysctrl (
         .system_joy_swap(osd_joy_swap),
     	.system_volume(osd_volume),
 		.system_stereo_mix(osd_stereo_mix),
-        .system_cpu(osd_cpu),
 				 
         .int_out_n(spi_intn),
         .int_in( { 4'b0000, sdc_int, 1'b0, hid_int, 1'b0 }),
