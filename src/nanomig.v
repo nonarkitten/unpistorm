@@ -31,7 +31,7 @@ module nanomig (
 
    input [7:0]	 memory_config,
    input [2:0]	 fastram_config,
-   input [1:0]	 cpu_config = 2'd2,
+   input [1:0]	 cpu_config,
    input [5:0]	 chipset_config,
    input [3:0]	 floppy_config,
    input [3:0]	 video_config,
