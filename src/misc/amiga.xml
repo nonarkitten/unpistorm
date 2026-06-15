@@ -35,7 +35,7 @@
     </action>      
   </actions>
   
-  <menu label="NanoMig TG68K">
+  <menu label="NanoMig">
     <fileselector label="Floppy DF0:" ext="adf" index="0"/>
     <menu label="System">
 	<!--IS tang_nano20k_020 -->
