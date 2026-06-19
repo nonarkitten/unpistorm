@@ -6,15 +6,15 @@
 `define TMDS_BY_LOGIC
 `define INFER_DPRAM
 // `define ENABLE_TG68K
-`define DISABLE_IDE
+`define DISABLE_IDE       // the inferred ram exceeds the chip
  
 module top(
   input			clk,
 
-  input			reset,
-  input			user,
+  input			reset_n,
+  input			user_n,
 
-  output [4:0]	leds_n,
+  output [4:0]	leds,
 
   // spi flash interface
   output		mspi_cs,
@@ -36,40 +36,40 @@ module top(
   output [1:0]	O_sdram_ba, // two banks
   output [1:0]	O_sdram_dqm, // 16/4
 
-  // generic IO, used for mouse & joystick
-  input [5:0]	js0,
-
-  // spare IO, used for 2nd joystick
-  input [5:0]   js1,
-
-  // MIDI/UART
-  input			midi_in,
-  output		midi_out,
+  // GPIO is used for joysticks and the companion
+  inout [27:0] gpio,
 
   // SD card slot
   output		sd_clk,
   inout			sd_cmd, // MOSI
   inout [3:0]	sd_dat, // 0: MISO
-	   
-  // SPI connection to ob-board BL616. By default an external
-  // connection is used with a M0S Dock
-  input			spi_sclk,
-  input			spi_csn,
-  output		spi_dir,
-  input			spi_dat,
-  output		spi_irqn,
 
   // hdmi/tdms
-  output [7:0] tmds
+  output [3:0] gpdi_dp    // negative seems to be mapped implicitely
 );
-  
+
+wire [7:0] tmds;
+assign gpdi_dp = { tmds[7], tmds[5], tmds[3], tmds[1] };
+
+// map joysticks onto GPIO 0 to 11
+assign gpio[5:0] = 6'hzz;
+wire [5:0] js0 = gpio[5:0];
+assign gpio[11:6] = 6'hzz;
+wire [5:0] js1 = gpio[11:6];
+
+// map companion onto GPIO 21 to 25
+wire spi_dir;
+wire spi_irqn;
+assign gpio[25:21] = { 3'bzzz, spi_irqn, spi_dir };
+wire spi_csn  = gpio[23];
+wire spi_sclk = gpio[24];
+wire spi_dat  = gpio[25];
+
 // physcial dsub9 joystick & mouse port 1 and 2
 wire [5:0] db9_joy0 = { !js0[5], !js0[0], !js0[2], !js0[1], !js0[4], !js0[3] };   
 wire [5:0] db9_joy1 = { !js1[5], !js1[0], !js1[2], !js1[1], !js1[4], !js1[3] }; 
    
-wire [4:0]	leds;
 assign leds[4] = |{sd_wr,sd_rd};
-assign leds_n = ~leds;  
 
 // ============================== clock generation ===========================
    
@@ -126,7 +126,7 @@ wire	   rom_download_in_progress;
 // generate a reset for some time after rom has been initialized
 reg [15:0] reset_cnt;
 always @(negedge clk_28m) begin
-    if(!pll_lock || !rom_done || reset || osd_reset || kbd_reset || rom_download_in_progress )
+    if(!pll_lock || !rom_done || reset_n || osd_reset || kbd_reset || rom_download_in_progress )
         reset_cnt <= 16'hffff;
     else if(reset_cnt != 0)
         reset_cnt <= reset_cnt - 16'd1;
@@ -428,7 +428,7 @@ sysctrl sysctrl (
         .int_in( { 4'b0000, sdc_int, 1'b0, hid_int, 1'b0 }),
         .int_ack( int_ack ),
 
-        .buttons( {user, reset} ),
+        .buttons( {!user_n, !reset_n} ),
         .leds(),
         .color(ws2812_color)
 );
@@ -577,8 +577,8 @@ nanomig nanomig
  .audio_right(audio_right),
 
  // uart interface 
- .uart_rx(midi_in),
- .uart_tx(midi_out),
+ .uart_rx(),
+ .uart_tx(),
  
  // keyboard & mouse				 
  .mouse_buttons(mouse_buttons), // mouse buttons
