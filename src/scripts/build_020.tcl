@@ -82,7 +82,7 @@ add_file misc/flash_dspi.v
 add_file tang/nano20k/gowin_dpb/sector_dpram.v
 add_file tang/nano20k/gowin_dpb/ide_dpram.v
 add_file misc/sdram.sv
-add_file tang/nano20k/nanomig_020.cst
+add_file tang/nano20k/nanomig.cst
 add_file tang/nano20k/nanomig_020.sdc
 add_file fx68k/microrom.mem
 add_file fx68k/nanorom.mem
