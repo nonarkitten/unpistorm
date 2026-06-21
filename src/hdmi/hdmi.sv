@@ -154,6 +154,11 @@ logic [23:0] video_data = 24'd0;
 logic [5:0] control_data = 6'd0;
 logic [11:0] data_island_data = 12'd0;
 
+`ifdef HDMI_TEST_PATTERN
+// cx is 11 bits, cy is 10 bits
+wire [23:0] rgb_test = { cy[9:6],cx[9:6],  cy[5:0],2'b00,  cx[5:0],2'b00 };
+`endif
+   
 generate
     if (!DVI_OUTPUT)
     begin: true_hdmi_output
@@ -243,7 +248,11 @@ generate
             else
             begin
                 mode <= data_island_guard ? 3'd4 : data_island_period ? 3'd3 : video_guard ? 3'd2 : video_data_period ? 3'd1 : 3'd0;
+`ifdef HDMI_TEST_PATTERN
+                video_data <= rgb_test;
+`else
                 video_data <= rgb;
+`endif
                 control_data <= {{1'b0, data_island_preamble}, {1'b0, video_preamble || data_island_preamble}, {vsync, hsync}}; // ctrl3, ctrl2, ctrl1, ctrl0, vsync, hsync
                 data_island_data[11:4] <= packet_data[8:1];
                 data_island_data[3] <= cx != 0;
@@ -265,7 +274,11 @@ generate
             else
             begin
                 mode <= video_data_period ? 3'd1 : 3'd0;
+`ifdef HDMI_TEST_PATTERN
+                video_data <= rgb_test;
+`else
                 video_data <= rgb;
+`endif
                 control_data <= {4'b0000, {vsync, hsync}}; // ctrl3, ctrl2, ctrl1, ctrl0, vsync, hsync
             end
         end
