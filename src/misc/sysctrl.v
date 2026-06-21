@@ -33,6 +33,7 @@ module sysctrl (
   output reg [1:0]  system_floppy_drives,
   output reg	    system_floppy_wrprot,
   output reg	    system_floppy_turbo,
+  output reg [1:0]  system_cpu,
   output reg [1:0]  system_chipset,
   output reg	    system_video_mode,
   output reg [1:0]  system_video_screen,
@@ -104,7 +105,8 @@ always @(posedge clk) begin
       // will very likely override these early
       system_floppy_drives <= 2'd0;
       system_floppy_turbo <= 1'b1;      
-      system_floppy_wrprot <= 1'b1;      
+      system_floppy_wrprot <= 1'b1; 
+	  system_cpu <= 2'b11;     
       system_chipset <= 2'd2;      
       system_video_mode <= 1'b0;      
       system_video_screen <= 2'd0;      
@@ -210,6 +212,8 @@ always @(posedge clk) begin
 		   if(id == "P") system_floppy_wrprot <= data_in[0];
 		   // Value "C": chipset OCS-A500(0), OCS-A1000(1) or ECS(2)
 		   if(id == "C") system_chipset <= data_in[1:0];
+		   // Value "T": CPU 68000(0), 68010(1) or 68020(2)
+		   if(id == "T") system_cpu <= data_in[1:0];
 		   // Value "F": video filter none(0), h(1), v(2) or h+v(3)
 		   if(id == "F") system_video_filter <= data_in[1:0];
 		   // Value "V": PAL(0) or NTSC(1) video
