@@ -1115,6 +1115,10 @@ wire [15:0] JOYA0 = 16'h0000;
 wire [15:0] JOYA1 = 16'h0000;
 wire [63:0] RTC = 64'h0;
 
+/* ======================================================================================== */
+/* =============================== internal ROM and RAM =================================== */
+/* ======================================================================================== */
+
 /* option to map a (small) internal rom. This can be useful for testing if
    flash and/or sdram aren't working properly during board bringup */
 `ifdef ENABLE_INT_ROM
@@ -1122,14 +1126,48 @@ wire [63:0] RTC = 64'h0;
 reg [15:0] rom[1024];  // 2kbytes rom
 
 // here, one of the rom images from the test_roms directory may be selected
-initial $readmemh("pwr_led_blink.hex", rom);   // pwr_led_blink is a very basic cpu test
+// initial $readmemh("pwr_led_blink.hex", rom);   // pwr_led_blink is a very basic cpu test
+initial $readmemh("video_init.hex", rom);
 
 reg [15:0] romD;
-always_ff @(posedge clk_sys) 
-	romD <= rom[ram_address[10:1]];
+always_ff @(posedge clk_sys)
+	if(clk7n_en)
+		if(!_ram_oe)
+			romD <= rom[ram_address[10:1]];
 
-wire int_rom_sel = ram_address[22:19] == 4'b1111;
-wire [15:0] ramdata_in_ext = int_rom_sel?romD:ramdata_in;
+wire int_rom_sel = ram_address[22:11] == 12'hf00;
+
+`ifdef ENABLE_INT_RAM
+
+/* additionally to the internal rom, some internal ram can also be enabled */
+/* This is needed even for very basic tests as e.g. a working amiga video needs a */
+/* copper list in ram */
+
+reg [7:0] raml[1024];  // 2kbytes ram
+reg [7:0] ramh[1024];
+
+reg [15:0] ramD;
+always_ff @(posedge clk_sys) begin
+	if(clk7n_en) begin
+		if(!_ram_oe)
+			ramD <= { ramh[ram_address[10:1]], raml[ram_address[10:1]] };
+		
+		if(!_ram_we) begin
+			ramh[ram_address[10:1]] <= ram_data[15:8];
+			raml[ram_address[10:1]] <= ram_data[7:0];
+		end	
+	end
+end
+
+wire int_ram_sel = ram_address[22:11] == 12'h000;
+wire [15:0] ramdata_in_ext = int_rom_sel?romD:
+						       int_ram_sel?ramD:
+							   ramdata_in;
+`else
+wire [15:0] ramdata_in_ext = int_rom_sel?romD:
+							   ramdata_in;
+`endif
+
 `else
 wire [15:0] ramdata_in_ext = ramdata_in;
 `endif

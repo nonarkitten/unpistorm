@@ -15,8 +15,9 @@
 `define INFER_DPRAM
 // `define ENABLE_TG68K
 `define DISABLE_IDE       // the inferred ram exceeds the chip
-`define HDMI_TEST_PATTERN  // display static test pattern on HDMI instead of amiga video
-`define ENABLE_INT_ROM     // enable internal test rom in nanomig.v
+// `define HDMI_TEST_PATTERN  // display static test pattern on HDMI instead of amiga video
+`define ENABLE_INT_ROM     // enable 2k internal test rom in nanomig.v
+`define ENABLE_INT_RAM     // if internal rom is enabled, then this also enables 2k internal test ram in nanomig.v
 
 module top(
   input		clk,
@@ -43,8 +44,8 @@ module top(
   output	O_sdram_wen_n, // write enable
   inout [15:0]	IO_sdram_dq, // 16 bit bidirectional data bus
   output [12:0]	O_sdram_addr, // 13 bit multiplexed address bus
-  output [1:0]	O_sdram_ba, // two banks
-  output [1:0]	O_sdram_dqm, // 16/4
+  output [1:0]	O_sdram_ba, // four banks
+  output [1:0]	O_sdram_dqm, // 2*8bit
 
   // GPIO is used for joysticks and the companion
   inout [27:0]	gpio,
@@ -781,12 +782,12 @@ wire [21:0] sdram_addr    =
 
 assign O_sdram_clk = clk_85m_shifted;   
 assign O_sdram_cke = 1'b1;  // clock enable
-   
+
 sdram sdram (
-	.sd_data    ( IO_sdram_dq   ), // 32 bit bidirectional data bus
-	.sd_addr    ( O_sdram_addr  ), // 11 bit multiplexed address bus
+	.sd_data    ( IO_sdram_dq   ), // 14 bit bidirectional data bus
+	.sd_addr    ( O_sdram_addr  ), // 13 bit multiplexed address bus
 	.sd_dqm     ( O_sdram_dqm   ), // two byte masks
-	.sd_ba      ( O_sdram_ba    ), // two banks
+	.sd_ba      ( O_sdram_ba    ), // four banks
 	.sd_cs      ( O_sdram_cs_n  ), // a single chip select
 	.sd_we      ( O_sdram_wen_n ), // write enable
 	.sd_ras     ( O_sdram_ras_n ), // row address select
