@@ -1114,7 +1114,26 @@ wire [15:0] JOY3 = 16'h0000;
 wire [15:0] JOYA0 = 16'h0000;
 wire [15:0] JOYA1 = 16'h0000;
 wire [63:0] RTC = 64'h0;
-   
+
+/* option to map a (small) internal rom. This can be useful for testing if
+   flash and/or sdram aren't working properly during board bringup */
+`ifdef ENABLE_INT_ROM
+
+reg [15:0] rom[1024];  // 2kbytes rom
+
+// here, one of the rom images from the test_roms directory may be selected
+initial $readmemh("pwr_led_blink.hex", rom);   // pwr_led_blink is a very basic cpu test
+
+reg [15:0] romD;
+always_ff @(posedge clk_sys) 
+	romD <= rom[ram_address[10:1]];
+
+wire int_rom_sel = ram_address[22:19] == 4'b1111;
+wire [15:0] ramdata_in_ext = int_rom_sel?romD:ramdata_in;
+`else
+wire [15:0] ramdata_in_ext = ramdata_in;
+`endif
+
 minimig minimig
 (
 	//m68k pins
@@ -1140,7 +1159,7 @@ minimig minimig
  
 	//sram pins
 	.ram_data     (ram_data         ), // SRAM data bus
-	.ramdata_in   (ramdata_in       ), // SRAM data bus in
+	.ramdata_in   (ramdata_in_ext   ), // SRAM data bus in
 	.ram_address  (ram_address      ), // SRAM address bus
 	._ram_bhe     (_ram_bhe         ), // SRAM upper byte select
 	._ram_ble     (_ram_ble         ), // SRAM lower byte select

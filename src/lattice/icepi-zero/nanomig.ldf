@@ -2,8 +2,8 @@
 <BaliProject version="3.2" title="nanomig" device="LFE5U-25F-6BG256C" default_implementation="impl">
     <Options/>
     <Implementation title="impl" dir="impl" description="impl" synthesis="synplify" default_strategy="Strategy1">
-        <Options VerilogStandard="System Verilog" def_top="TG68K">
-            <Option name="include path" value="../../fx68k;../../misc;../../ram_test"/>
+        <Options VerilogStandard="System Verilog">
+            <Option name="include path" value="../../fx68k;../../misc;../../test_roms"/>
             <Option name="top" value="top"/>
         </Options>
         <Source name="top.sv" type="Verilog" type_short="Verilog">

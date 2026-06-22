@@ -16,7 +16,8 @@
 // `define ENABLE_TG68K
 `define DISABLE_IDE       // the inferred ram exceeds the chip
 `define HDMI_TEST_PATTERN  // display static test pattern on HDMI instead of amiga video
- 
+`define ENABLE_INT_ROM     // enable internal test rom in nanomig.v
+
 module top(
   input		clk,
 
@@ -540,25 +541,7 @@ wire fastram_ready;
    
 wire [15:0] sdram_dout;
 
-`ifdef INT_ROM
 assign ram_din = sdram_dout;
-`else
-
-// use internal rom/ram instead of flash
-reg [15:0] rom[1024];		
-reg [15:0] ram[1024];		
-initial begin
-	$readmemh("ram_test.hex", rom);
-end
-reg [15:0] romD;
-
-wire int_rom_acc = ram_a[22:19] == 4'b1111;
-assign ram_din = int_rom_acc?romD:15'h55cc; // sdram_dout;
-
-always_ff @(posedge clk_28m) 
-	romD <= rom[ram_a[10:1]];
-
-`endif
 
 // pack config values into minimig config
 wire [5:0] chipset_config = { 1'b0,osd_chipset,osd_video_mode,1'b0 };
