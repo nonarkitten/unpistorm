@@ -2,12 +2,12 @@
     top.sv - NanoMig on Lattice/IcePi-Zero
 
 	Warning: This will currently not rebuild the config xml but instead just
-	use whtever is present from previous (gowin) builds. This needs to be fixed!
+	use whatever is present from previous (gowin) builds. This needs to be fixed!
 	
 	openFPGALoader -cft231X --pins=7:3:5:6 lattice/icepi-zero/impl/nanomig_impl.bit 
 
 	openFPGALoader -cft231X --pins=7:3:5:6 --external-flash -o 0x400000 kick13.rom
-	openFPGALoader -cft231X --pins=7:3:5:6 --external-flash -o 0x440000 kick13.rom	
+	openFPGALoader -cft231X --pins=7:3:5:6 --external-flash -o 0x440000 kick13.rom	 
 */ 
  
 `define LATTICE
@@ -16,8 +16,8 @@
 // `define ENABLE_TG68K
 `define DISABLE_IDE       // the inferred ram exceeds the chip
 // `define HDMI_TEST_PATTERN  // display static test pattern on HDMI instead of amiga video
-`define ENABLE_INT_ROM     // enable 2k internal test rom in nanomig.v
-`define ENABLE_INT_RAM     // if internal rom is enabled, then this also enables 2k internal test ram in nanomig.v
+// `define ENABLE_INT_ROM     // enable 2k internal test rom in nanomig.v
+// `define ENABLE_INT_RAM     // if internal rom is enabled, then this also enables 2k internal test ram in nanomig.v
 
 module top(
   input		clk,
@@ -90,7 +90,7 @@ assign leds[4] = |{sd_wr,sd_rd};
 // SDRAM and flash clock: 84 MHz
 // Amiga clock: 7.0 (Pixel/4)
    
-`define PIXEL_CLOCK 28375160
+`define PIXEL_CLOCK 2800000 // should be 28375160
 
 wire clk_pixel_x5;   
 wire pll_lock;   
@@ -138,14 +138,16 @@ wire	   rom_download_in_progress;
 // generate a reset for some time after rom has been initialized
 reg [15:0] reset_cnt;
 always @(negedge clk_28m) begin
-    if(!pll_lock || !rom_done || reset_n || osd_reset || kbd_reset || rom_download_in_progress )
+    if(!pll_lock || !rom_done || !reset_n || osd_reset || kbd_reset || rom_download_in_progress)
         reset_cnt <= 16'hffff;
     else if(reset_cnt != 0)
         reset_cnt <= reset_cnt - 16'd1;
 end
 
 // this is the reset that goes into the nanomig itself
-wire cpu_reset = |reset_cnt;
+wire cpu_reset = reset_cnt != 0;
+assign leds[2] = cpu_reset;
+
 wire sdram_ready;
 
 // -------------------------- M0S MCU interface -----------------------
@@ -819,7 +821,18 @@ sdram sdram (
 
 // run the flash a 85MHz. This is only used at power-up to copy kickstart
 // from flash to sdram
-assign mspi_clk = clk_85m_shifted;   
+
+`ifdef USE_USRMCLK
+// https://0x04.net/~mwk/doc/lattice/ecp5/FPGA-TN-02039-2-3-ECP5-and-ECP5-5G-sysCONFIG.pdf
+USRMCLK usrmclk (
+ .USRMCLKI(clk_85m_shifted),
+ .USRMCLKTS(!pll_lock)   // 0 = drive clock, this cannot be a constant!
+)/* synthesis syn_noprune=1 */;   
+`else
+assign mspi_clk = clk_85m_shifted;
+`endif
+
+
 flash flash (
     .clk       ( clk_85m     ),
     .resetn    ( pll_lock    ),

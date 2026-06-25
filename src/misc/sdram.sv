@@ -78,8 +78,6 @@ localparam MODE = { 1'b0, NO_WRITE_BURST, OP_MODE, CAS_LATENCY, ACCESS_TYPE, BUR
 
 // calculate bit array and offsets for the different ram configurations
 localparam DQM_WIDTH = (DATA_WIDTH/8);     // number of DQM bits (4 for 32 data bits, 2 for 16 bits)   
-// the unused (off) dqm bits are none for DATA_WIDTH=16 and 2'11 for DATA_WIDTH=32
-localparam DQM_OFF = {(DQM_WIDTH-2){1'b1}};
 
 // expand to from 22 to 32 address bits internally to be able to drive bigger rams as well
 // and shift one bit for 32 bit data bus as addr[0] is used to multiplex between
@@ -232,8 +230,8 @@ always @(posedge clk) begin
 		 sd_addr <= addr32[RAS_WIDTH+CAS_WIDTH-1:CAS_WIDTH];		 
 		 sd_ba <= addr32[RAS_WIDTH+CAS_WIDTH+1:RAS_WIDTH+CAS_WIDTH];
  
-	         if(!we) sd_dqm <= {DQM_WIDTH{1'b0}};
-		 else    sd_dqm <= addr[0]?{DQM_OFF,ds}:{ds,DQM_OFF};
+	         if(!we) sd_dqm <= {(DATA_WIDTH/8){1'b0}};
+		 else    sd_dqm <= addr[0]?{ {(DATA_WIDTH/8-2){1'b1}},ds}:{ds,{(DATA_WIDTH/8-2){1'b1}}};
               end else begin
 		 sd_cmd <= CMD_AUTO_REFRESH;
 		 sdram_port <= PORTREFRESH;
@@ -241,14 +239,12 @@ always @(posedge clk) begin
 	   end else if(p2_cs) begin
 	      sdram_port <= PORT2;
 	      sd_cmd <= CMD_ACTIVE;
-
+	      
 	      sd_addr <= p2_addr32[RAS_WIDTH+CAS_WIDTH-1:CAS_WIDTH];		 
 	      sd_ba <= p2_addr32[RAS_WIDTH+CAS_WIDTH+1:RAS_WIDTH+CAS_WIDTH];
 
-	      // TODO sd_addr <= p2_addr[21:9];	      
-	      // TODO sd_ba <= 2'b00;	      
-	      if(!p2_we) sd_dqm <= {DQM_WIDTH{1'b0}};
-	      else sd_dqm <= p2_addr[0]?{DQM_OFF,p2_ds}:{p2_ds,DQM_OFF};;
+	      if(!p2_we) sd_dqm <= {(DATA_WIDTH/8){1'b0}};
+	      else       sd_dqm <= p2_addr[0]?{{(DATA_WIDTH/8-2){1'b1}},p2_ds}:{p2_ds,{(DATA_WIDTH/8-2){1'b1}}};
            end else
 	     sd_cmd <= CMD_NOP;	   
         end

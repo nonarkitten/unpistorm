@@ -28,8 +28,8 @@ iwlp0:	dbra	d0,iwlp0
 
 startcopper:
 	;; clear screem memory
-	move.l	#(320*256)/32-1,d0
 	move.l	#VIDMEM,a0
+	move.l	#(320*256)/32-1,d0 ; 2560 long words of ram
 cllp:	clr.l	(a0)+
 	dbra 	d0,cllp
 	
@@ -49,10 +49,10 @@ cplp:	move.l	(a0)+,(a1)+
 	;; both patterns should look the same on a
 	;; big endian like the 68000
 	move.l	#$cc33aa55,VIDMEM+4000
-	move.b	#$cc,VIDMEM+4040
-	move.b	#$33,VIDMEM+4041
-	move.b	#$aa,VIDMEM+4042
-	move.b	#$55,VIDMEM+4043
+	move.b	#$cc,VIDMEM+4080
+	move.b	#$33,VIDMEM+4081
+	move.b	#$aa,VIDMEM+4082
+	move.b	#$55,VIDMEM+4083
 
 mainlp:	bclr.b	#1,$bfe001	; LED on
 

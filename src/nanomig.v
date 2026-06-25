@@ -1127,13 +1127,13 @@ reg [15:0] rom[1024];  // 2kbytes rom
 
 // here, one of the rom images from the test_roms directory may be selected
 // initial $readmemh("pwr_led_blink.hex", rom);   // pwr_led_blink is a very basic cpu test
-initial $readmemh("video_init.hex", rom);
+// initial $readmemh("video_init.hex", rom);
+initial $readmemh("flash_read.hex", rom);
 
 reg [15:0] romD;
 always_ff @(posedge clk_sys)
-	if(clk7n_en)
-		if(!_ram_oe)
-			romD <= rom[ram_address[10:1]];
+  if(clk7n_en && !_ram_oe)
+    romD <= rom[ram_address[10:1]];
 
 wire int_rom_sel = ram_address[22:11] == 12'hf00;
 
@@ -1153,8 +1153,8 @@ always_ff @(posedge clk_sys) begin
 			ramD <= { ramh[ram_address[10:1]], raml[ram_address[10:1]] };
 		
 		if(!_ram_we) begin
-			ramh[ram_address[10:1]] <= ram_data[15:8];
-			raml[ram_address[10:1]] <= ram_data[7:0];
+		   if(!_ram_bhe) ramh[ram_address[10:1]] <= ram_data[15:8];
+		   if(!_ram_ble) raml[ram_address[10:1]] <= ram_data[7:0];
 		end	
 	end
 end
@@ -1268,7 +1268,7 @@ minimig minimig
 	.memcfg       ( ), // memory config
 
 `ifndef DISABLE_IDE
-	.hdd_led      (hdd_led          ),
+	.hdd_led      ( hdd_led         ),
 	.ide_fast     (                 ),
 	.ide_ext_irq  ( 1'b0            ),
 	.ide_ena      (                 ),
