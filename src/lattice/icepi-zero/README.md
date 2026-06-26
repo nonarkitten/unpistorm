@@ -21,3 +21,23 @@ is the mapping of the companion interface.
 ![Wiring](wiring.png)
 
 This can e.g. connected to the [RP2040 variant](https://github.com/MiSTle-Dev/FPGA-Companion/tree/main/src/rp2040) as seen in the photo of the breadboard setup above. For reliability, the SCK connection should not be wired directly but via a 220 ohms series resistor.
+
+## Flashing
+
+The core can be flashed using openFPGAloader using the following command:
+
+```
+openFPGALoader -cft231X --pins=7:3:5:6 -f impl/nanomig_impl.bit
+```
+
+Kickstart 1.3 needs to be flashed two times as the Amiga expects it to be mirrored in the 512k
+kickstart address space:
+
+```
+openFPGALoader -cft231X --pins=7:3:5:6 --external-flash -o 0x400000 kick13.rom
+openFPGALoader -cft231X --pins=7:3:5:6 --external-flash -o 0x440000 kick13.rom   
+```
+
+The NanoMig should boot to the kickstart splash screen even without anything connected to the
+GPIO pins. The RP2040/FPGA Companion is needed to setup the on-screen-display and to
+select a floppy disk image to boot from.
