@@ -3,7 +3,7 @@
     <Options/>
     <Implementation title="impl" dir="impl" description="impl" synthesis="synplify" default_strategy="Strategy1">
         <Options VerilogStandard="System Verilog" def_top="TG68K">
-            <Option name="include path" value="../../fx68k;../../misc;../../test_roms"/>
+            <Option name="include path" value="../../fx68k;.;../../test_roms"/>
             <Option name="top" value="top"/>
         </Options>
         <Source name="top.sv" type="Verilog" type_short="Verilog">

@@ -1,7 +1,7 @@
 #--  Synopsys, Inc.
 #--  Version V-2023.09L-2
 #--  Project file /home/tharbaum/tmp/private_stuff/mistlite/github/NanoMig/src/lattice/icepi-zero/impl/run_options.txt
-#--  Written on Thu Jun 25 12:27:07 2026
+#--  Written on Fri Jun 26 10:21:41 2026
 
 
 #project files
@@ -96,7 +96,7 @@ impl -add impl -type fpga
 
 set_option -vlog_std sysv
 set_option -project_relative_includes 1
-set_option -include_path {/home/tharbaum/tmp/private_stuff/mistlite/github/NanoMig/src/fx68k;/home/tharbaum/tmp/private_stuff/mistlite/github/NanoMig/src/misc;/home/tharbaum/tmp/private_stuff/mistlite/github/NanoMig/src/test_roms;/home/tharbaum/tmp/private_stuff/mistlite/github/NanoMig/src/lattice/icepi-zero}
+set_option -include_path {/home/tharbaum/tmp/private_stuff/mistlite/github/NanoMig/src/fx68k;/home/tharbaum/tmp/private_stuff/mistlite/github/NanoMig/src/lattice/icepi-zero;/home/tharbaum/tmp/private_stuff/mistlite/github/NanoMig/src/test_roms}
 
 #device options
 set_option -technology ECP5U
