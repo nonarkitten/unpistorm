@@ -146,7 +146,6 @@ end
 
 // this is the reset that goes into the nanomig itself
 wire cpu_reset = reset_cnt != 0;
-assign leds[2] = cpu_reset;
 
 wire sdram_ready;
 

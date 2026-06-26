@@ -107,10 +107,12 @@ always @(posedge clk_sys, posedge reset) begin
         reg [7:0] reset_s;
         reg rs;
 
-        if(reset) reset_s <= '1;
-        else begin
+        if(reset) begin
+	        reset_s <= '1;
+	        reset_d <= '1;	   
+        end else begin
                 reset_s <= reset_s << 1;
-                rs <= reset_s[7];
+                rs <= |reset_s;
                 reset_d <= rs;
         end
 end
