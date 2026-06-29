@@ -18,31 +18,7 @@ no real Amiga, the FPGA *is* the chipset.
 
 Un-PiStorm is an overlay on **MiSTle-Dev/NanoMig** (GPLv3). It deletes the
 TG68/fx68k softcore (`cpu_wrapper`) and feeds Minimig's CPU bus from the Pi
-instead. Drop the new files in like so:
-
-```
-NanoMig/                         (your fork)
-  src/unpistorm/
-    pistorm_bridge.v             # 68000 bus master (replaces cpu_wrapper)
-    ps_classic_slave.v           # Pi-facing classic-protocol front-end
-  src/tang/nano20k/
-    unpistorm.cst                # Pi-bus pin constraints (this overlay)
-  sim/
-    chipram_model.v  tb_top.v  buptest.cpp           # bridge-only bench
-    tb_ps_top.v      ps_buptest.cpp                  # full Pi-path bench
-  README.md                      # this file (keep NanoMig's as NANOMIG.md)
-```
-
-Commit from your own machine, under your own credentials:
-
-```
-git checkout -b unpistorm-bridge
-mkdir -p src/unpistorm
-# copy the files into the tree above, then:
-git add -A
-git commit -m "Un-PiStorm: PiStorm bridge + classic slave, Verilator buptest"
-git push -u origin unpistorm-bridge
-```
+instead.
 
 ---
 
@@ -115,10 +91,7 @@ D8=52  D9=53 D10=71 D11=72 D12=73 D13=74 D14=77 D15=88
 ```
 
 The 8 control lines (TXN, IPL_ZERO, A0, A1, CLK, RESET, RD, WR) go on free
-header GPIO. **Those exact Gowin pin numbers must come from the Tang Nano 20K
-pinout (unconstrained header IO) — I won't invent them.** They're marked TODO in
-`unpistorm.cst`; fill them from the board reference (any free LVCMOS33 header
-pin; keep RD/WR low-skew).
+header GPIO. They're marked TODO in `unpistorm.cst`.
 
 ---
 
