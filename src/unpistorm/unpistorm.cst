@@ -1,0 +1,24 @@
+// unpistorm.cst - Pi-bus pin constraints overlay for Tang Nano 20K (GW2AR-18).
+// Place in src/tang/nano20k/. D0..D15 reuse NanoMig's freed DB9/MIDI/buzzer
+// header pins (we drive HID over USB instead). Control pins are TODO: fill the
+// 8 numbers from the Tang Nano 20K header pinout (any free LVCMOS33 GPIO).
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+// ---- 16-bit data bus (grounded: NanoMig freed pins) ----
+IO_LOC "ps_d[0]"  25;  IO_LOC "ps_d[1]"  26;  IO_LOC "ps_d[2]"  27;  IO_LOC "ps_d[3]"  28;
+IO_LOC "ps_d[4]"  29;  IO_LOC "ps_d[5]"  30;  IO_LOC "ps_d[6]"  31;  IO_LOC "ps_d[7]"  49;
+IO_LOC "ps_d[8]"  52;  IO_LOC "ps_d[9]"  53;  IO_LOC "ps_d[10]" 71;  IO_LOC "ps_d[11]" 72;
+IO_LOC "ps_d[12]" 73;  IO_LOC "ps_d[13]" 74;  IO_LOC "ps_d[14]" 77;  IO_LOC "ps_d[15]" 88;
+
+// ---- control (TODO: assign from Tang Nano 20K free header GPIO) ----
+// IO_LOC "ps_a0"        <pin>;
+// IO_LOC "ps_a1"        <pin>;
+// IO_LOC "ps_rd"        <pin>;
+// IO_LOC "ps_wr"        <pin>;
+// IO_LOC "ps_reset"     <pin>;
+// IO_LOC "ps_clk"       <pin>;
+// IO_LOC "ps_txn"       <pin>;
+// IO_LOC "ps_ipl_zero"  <pin>;
+
+IO_PORT "ps_d[0]"  IO_TYPE=LVCMOS33 PULL_MODE=NONE;
+// (apply the same IO_PORT line to every ps_* signal once pins are assigned)
